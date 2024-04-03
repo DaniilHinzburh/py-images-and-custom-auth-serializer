@@ -1,15 +1,16 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager, UserManager as DjangoUserManager
 from django.db import models
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
-class UserManager(DjangoUserManager):
+class UserManager(BaseUserManager):
+
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
+
         if not email:
             raise ValueError("The given email must be set")
-
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -27,7 +28,6 @@ class UserManager(DjangoUserManager):
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")
-
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
@@ -37,6 +37,8 @@ class UserManager(DjangoUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
+
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = [""]
+    REQUIRED_FIELDS = []
+
     objects = UserManager()
