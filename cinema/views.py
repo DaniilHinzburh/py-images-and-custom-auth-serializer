@@ -136,6 +136,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
             )
         )
     )
+
     serializer_class = MovieSessionSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
